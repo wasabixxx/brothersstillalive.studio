@@ -1,214 +1,472 @@
 <?php
 /**
  * Brothers Still Alive - Song Page
- * Dynamic page for displaying individual songs by slug
+ * Template hiển thị bài hát theo slug (giống Believe/TuneCore)
  */
 
-// Configuration
-$site_name = "Brothers Still Alive";
-$base_url = "https://brothersstillalive.studio";
+require_once __DIR__ . '/core/bootstrap.php';
 
 // Get slug from URL
-$slug = isset($_GET['slug']) ? htmlspecialchars(trim($_GET['slug'])) : '';
+$slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 
 if (empty($slug)) {
     header('Location: /');
     exit;
 }
 
-// TODO: In production, fetch song data from database
-// For now, use sample data
-$songs = [
-    'baithunhat' => [
-        'title' => 'Bài Thứ Nhất',
-        'artist' => 'BSA Crew',
-        'release_date' => '2024-01-15',
-        'cover_image' => 'images/songs/baithunhat.jpg',
-        'description' => 'Single đầu tay của BSA - Câu chuyện về những người anh em và con đường Hip-hop.',
-        'lyrics' => "Verse 1:
-Đây là câu chuyện của chúng tôi
-Những người anh em đứng cạnh nhau
-Từ con hẻm nhỏ đến ánh đèn sân khấu
-Không bao giờ quên nơi mình bắt đầu
+// Get song from database
+$db = getDB();
+$stmt = $db->prepare("SELECT * FROM songs WHERE slug = ? AND is_active = 1");
+$stmt->execute([$slug]);
+$song = $stmt->fetch();
 
-Chorus:
-Brothers Still Alive
-Vẫn còn sống, vẫn còn cháy
-Brothers Still Alive
-Mỗi ngày là một trận chiến mới
-
-(Thêm lyrics tại đây...)",
-        'spotify_url' => 'https://open.spotify.com/track/xxx',
-        'apple_music_url' => 'https://music.apple.com/xxx',
-        'youtube_url' => 'https://youtube.com/watch?v=xxx',
-        'soundcloud_url' => 'https://soundcloud.com/xxx'
-    ],
-    'duongve' => [
-        'title' => 'Đường Về',
-        'artist' => 'BSA Crew',
-        'release_date' => '2024-02-20',
-        'cover_image' => 'images/songs/duongve.jpg',
-        'description' => 'Bản ballad rap đầy cảm xúc về gia đình và quê hương.',
-        'lyrics' => "(Lyrics sẽ được thêm sau...)",
-        'spotify_url' => 'https://open.spotify.com/track/xxx',
-        'apple_music_url' => 'https://music.apple.com/xxx',
-        'youtube_url' => 'https://youtube.com/watch?v=xxx',
-        'soundcloud_url' => 'https://soundcloud.com/xxx'
-    ]
-];
-
-// Check if song exists
-if (!isset($songs[$slug])) {
+// 404 if not found
+if (!$song) {
     http_response_code(404);
-    $page_title = "Không tìm thấy bài hát";
-    $site_description = "Bài hát bạn tìm kiếm không tồn tại.";
-    include 'includes/header.php';
     ?>
-    <section class="notFound">
-        <div class="container" style="text-align: center; padding: 150px 20px;">
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 - Không tìm thấy | <?= SITE_NAME ?></title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Inter', sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+            h1 { font-size: 6rem; color: #d4003a; }
+            h2 { font-size: 1.5rem; margin: 1rem 0; }
+            p { color: #888; margin-bottom: 2rem; }
+            a { display: inline-block; padding: 12px 30px; background: #d4003a; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 500; }
+            a:hover { background: #ff0044; }
+        </style>
+    </head>
+    <body>
+        <div>
             <h1>404</h1>
             <h2>Không tìm thấy bài hát</h2>
-            <p style="color: var(--color-text-secondary); margin: 20px 0 40px;">Bài hát bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-            <a href="/" class="buttonSolid" data-cursor="min">
-                Về trang chủ
-                <svg viewBox="0 0 33 15">
-                    <rect y="6.39545" width="31.7181" height="1.92231" rx="0.961156" />
-                    <rect x="25.9062" y="0.367493" width="10.0321" height="2.28002" rx="1.14001" transform="rotate(45 25.9062 0.367493)" />
-                    <rect x="33" y="7.47278" width="10.0321" height="2.28002" rx="1.14001" transform="rotate(135 33 7.47278)" />
-                </svg>
-            </a>
+            <p>Bài hát bạn đang tìm không tồn tại hoặc đã bị xóa.</p>
+            <a href="/">Về trang chủ</a>
         </div>
-    </section>
+    </body>
+    </html>
     <?php
-    include 'includes/footer.php';
     exit;
 }
 
-// Get song data
-$song = $songs[$slug];
-$page_title = $song['title'] . ' - ' . $song['artist'];
-$site_description = $song['description'];
+// Update view count
+$db->prepare("UPDATE songs SET view_count = view_count + 1 WHERE id = ?")->execute([$song['id']]);
 
-// Include header
-include 'includes/header.php';
+// Get cover image URL
+$coverImage = $song['cover_image'] ?: 'images/default-cover.jpg';
+// Tạo URL đầy đủ cho meta tags (OG image cần URL tuyệt đối)
+$coverImageFull = $coverImage;
+if (!str_starts_with($coverImage, 'http')) {
+    $coverImageFull = SITE_URL . '/' . $coverImage;
+}
+
+// Streaming platforms config
+$platforms = [
+    ['key' => 'spotify_url', 'name' => 'Spotify', 'logo' => LOGO_SPOTIFY, 'action' => 'Play'],
+    ['key' => 'apple_music_url', 'name' => 'Apple Music', 'logo' => LOGO_APPLE_MUSIC, 'action' => 'Play'],
+    ['key' => 'youtube_music_url', 'name' => 'YouTube Music', 'logo' => LOGO_YOUTUBE_MUSIC, 'action' => 'Play'],
+    ['key' => 'youtube_url', 'name' => 'YouTube', 'logo' => LOGO_YOUTUBE, 'action' => 'Watch'],
+    ['key' => 'amazon_music_url', 'name' => 'Amazon Music', 'logo' => LOGO_AMAZON, 'action' => 'Play'],
+    ['key' => 'tidal_url', 'name' => 'Tidal', 'logo' => LOGO_TIDAL, 'action' => 'Play'],
+    ['key' => 'deezer_url', 'name' => 'Deezer', 'logo' => LOGO_DEEZER, 'action' => 'Play'],
+    ['key' => 'nct_url', 'name' => 'NCT', 'logo' => 'https://assets.ams-prd.blv.cloud/images/stores/logo-nhaccuatui-label.png', 'action' => 'Play'],
+    ['key' => 'zing_url', 'name' => 'Zing MP3', 'logo' => 'https://assets.ams-prd.blv.cloud/images/stores/logo-zing-label.png', 'action' => 'Play'],
+    ['key' => 'soundcloud_url', 'name' => 'SoundCloud', 'logo' => 'https://assets.ams-prd.blv.cloud/images/stores/logo-soundcloud-label.png', 'action' => 'Play'],
+];
 ?>
-
-<!-- Song Hero Section -->
-<section class="songHero">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= e($song['title']) ?> - <?= e($song['artist']) ?> | <?= SITE_NAME ?></title>
+    <meta name="description" content="<?= e($song['description'] ?: $song['title'] . ' by ' . $song['artist']) ?>">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="music.song">
+    <meta property="og:title" content="<?= e($song['title']) ?> - <?= e($song['artist']) ?>">
+    <meta property="og:description" content="<?= e($song['description'] ?: 'Nghe ' . $song['title'] . ' trên các nền tảng streaming') ?>">
+    <meta property="og:image" content="<?= e($coverImageFull) ?>">
+    <meta property="og:url" content="<?= SITE_URL ?>/<?= e($song['slug']) ?>">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= e($song['title']) ?> - <?= e($song['artist']) ?>">
+    <meta name="twitter:image" content="<?= e($coverImageFull) ?>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* Background blur */
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('<?= e($coverImage) ?>');
+            background-size: cover;
+            background-position: center;
+            filter: blur(50px) brightness(0.5) saturate(1.2);
+            transform: scale(1.2);
+            z-index: -1;
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        /* Card wrapper */
+        .card {
+            position: relative;
+        }
+        
+        /* Header section - stacked card effect */
+        .card-header {
+            background: linear-gradient(180deg, #5a6a7e 0%, #3d4a5c 100%);
+            padding: 25px 20px 30px;
+            text-align: center;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            margin-bottom: -15px;
+        }
+        
+        /* Streaming card - sits behind header */
+        .card-body {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            z-index: 1;
+            padding-top: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Cover image */
+        .cover-image {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cover-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* YouTube embed */
+        .video-embed {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto 18px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-embed iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            display: block;
+            border: none;
+        }
+        
+        /* Artist & Title */
+        .artist-name {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+            letter-spacing: -0.02em;
+        }
+        
+        .song-title {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+        
+        /* Streaming links */
+        .streaming-list {
+            padding: 0;
+            list-style: none;
+        }
+        
+        .streaming-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 35px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        .streaming-item:hover {
+            background: #fafafa;
+        }
+        
+        .streaming-item:last-child {
+            border-bottom: none;
+        }
+        
+        .streaming-logo {
+            height: 36px;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
+        }
+        
+        .streaming-btn {
+            display: inline-block;
+            padding: 8px 22px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 50px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: transparent;
+        }
+        
+        .streaming-btn:hover {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+        
+        /* Footer */
+        .card-footer {
+            padding: 18px 20px;
+            text-align: center;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .footer-links {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .powered-by {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .powered-by-dots {
+            display: flex;
+            gap: 2px;
+            opacity: 0.4;
+        }
+        
+        .powered-by-dots span {
+            width: 3px;
+            height: 3px;
+            background: #999;
+            border-radius: 50%;
+        }
+        
+        .powered-by img {
+            height: 18px;
+            opacity: 0.5;
+        }
+        
+        .powered-by-bsa {
+            font-size: 0.7rem;
+            color: #999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .powered-by-bsa img {
+            height: 40px;
+            filter: brightness(0);
+            opacity: 0.7;
+        }
+        
+        /* Back link */
+        .back-link {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .back-link:hover {
+            color: #fff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+            
+            .card-header {
+                padding: 20px 15px 18px;
+            }
+            
+            .cover-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .video-embed {
+                max-width: 250px;
+            }
+            
+            .artist-name {
+                font-size: 1.2rem;
+            }
+            
+            .song-title {
+                font-size: 0.9rem;
+            }
+            
+            .streaming-item {
+                padding: 12px 25px;
+            }
+            
+            .streaming-logo {
+                height: 30px;
+                max-width: 120px;
+            }
+            
+            .streaming-btn {
+                padding: 6px 18px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "name": "<?= e($song['title']) ?>",
+        "byArtist": {
+            "@type": "MusicGroup",
+            "name": "<?= e($song['artist']) ?>"
+        },
+        "datePublished": "<?= $song['release_date'] ?>",
+        "image": "<?= e($coverImageFull) ?>",
+        "url": "<?= SITE_URL ?>/<?= e($song['slug']) ?>"
+    }
+    </script>
+</head>
+<body>
+    <!-- Background blur -->
+    <div class="bg-blur"></div>
+    
     <div class="container">
-        <div class="songHeroContent">
-            <!-- Cover Image -->
-            <div class="songCover" data-fade="1">
-                <?php if (!empty($song['cover_image']) && file_exists($song['cover_image'])): ?>
-                    <img src="<?php echo $song['cover_image']; ?>" alt="<?php echo $song['title']; ?> Cover">
-                <?php else: ?>
-                    <!-- Placeholder cover -->
-                    <div class="songCoverPlaceholder" style="background: linear-gradient(135deg, #d4003a 0%, #ff0044 100%);">
-                        <span>BSA+</span>
-                    </div>
+        <div class="card">
+            <!-- Header with cover & video -->
+            <div class="card-header">
+                <!-- Cover Image -->
+                <div class="cover-image">
+                    <img src="<?= e($coverImage) ?>" alt="<?= e($song['title']) ?>">
+                </div>
+                
+                <!-- YouTube Embed -->
+                <?php if ($song['youtube_video_id']): ?>
+                <div class="video-embed">
+                    <iframe 
+                        src="https://www.youtube.com/embed/<?= e($song['youtube_video_id']) ?>?rel=0" 
+                        title="<?= e($song['title']) ?>"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
                 <?php endif; ?>
+                
+                <!-- Artist & Song Title -->
+                <h1 class="artist-name"><?= e($song['artist']) ?></h1>
+                <p class="song-title"><?= e($song['title']) ?></p>
             </div>
             
-            <!-- Song Info -->
-            <div class="songInfo">
-                <p data-fade="1" class="songType">Single</p>
-                <h1 data-fade="1" class="songTitle"><?php echo $song['title']; ?></h1>
-                <p data-fade="2" class="songArtist"><?php echo $song['artist']; ?></p>
-                <p data-fade="2" class="songDate"><?php echo date('d/m/Y', strtotime($song['release_date'])); ?></p>
-                <p data-fade="2" class="songDescription"><?php echo $song['description']; ?></p>
-                
-                <!-- Streaming Links -->
-                <div data-fade="3" class="songStreaming">
-                    <h3>Nghe ngay trên:</h3>
-                    <div class="streamingLinks">
-                        <?php if (!empty($song['spotify_url'])): ?>
-                            <a href="<?php echo $song['spotify_url']; ?>" target="_blank" rel="noopener" class="streamingBtn spotify" data-cursor="icon">
-                                <i class="fab fa-spotify"></i>
-                                <span>Spotify</span>
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($song['apple_music_url'])): ?>
-                            <a href="<?php echo $song['apple_music_url']; ?>" target="_blank" rel="noopener" class="streamingBtn apple" data-cursor="icon">
-                                <i class="fab fa-apple"></i>
-                                <span>Apple Music</span>
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($song['youtube_url'])): ?>
-                            <a href="<?php echo $song['youtube_url']; ?>" target="_blank" rel="noopener" class="streamingBtn youtube" data-cursor="icon">
-                                <i class="fab fa-youtube"></i>
-                                <span>YouTube</span>
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($song['soundcloud_url'])): ?>
-                            <a href="<?php echo $song['soundcloud_url']; ?>" target="_blank" rel="noopener" class="streamingBtn soundcloud" data-cursor="icon">
-                                <i class="fab fa-soundcloud"></i>
-                                <span>SoundCloud</span>
-                            </a>
-                        <?php endif; ?>
+            <!-- Streaming Card Body -->
+            <div class="card-body">
+            <!-- Streaming Links -->
+            <ul class="streaming-list">
+                <?php foreach ($platforms as $platform): ?>
+                    <?php if (!empty($song[$platform['key']])): ?>
+                    <li class="streaming-item">
+                        <img src="<?= $platform['logo'] ?>" alt="<?= $platform['name'] ?>" class="streaming-logo">
+                        <a href="<?= e($song[$platform['key']]) ?>" target="_blank" rel="noopener" class="streaming-btn">
+                            <?= $platform['action'] ?>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            
+            <!-- Footer -->
+            <div class="card-footer">
+                <div class="footer-links">
+                    <a href="#">Cookies</a>
+                </div>
+                <div class="powered-by">
+                    <div class="powered-by-dots">
+                        <span></span><span></span><span></span><span></span>
                     </div>
                 </div>
+                <div class="powered-by-bsa">
+                    POWERED BY
+                    <img src="https://s6.imgcdn.dev/YlwyR8.png" alt="BSA">
+                </div>
+            </div>
             </div>
         </div>
+        
+        <!-- Back to home -->
+        <a href="/" class="back-link">← Về trang chủ BSA</a>
     </div>
-</section>
-
-<!-- Lyrics Section -->
-<?php if (!empty($song['lyrics'])): ?>
-<section class="songLyrics sectionAnimate">
-    <div class="container">
-        <h2 data-fade="1">Lyrics</h2>
-        <div data-fade="2" class="lyricsContent">
-            <pre><?php echo $song['lyrics']; ?></pre>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- Share Section -->
-<section class="songShare sectionAnimate">
-    <div class="container">
-        <h3 data-fade="1">Chia sẻ bài hát này</h3>
-        <div data-fade="2" class="shareButtons">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($base_url . '/' . $slug); ?>" target="_blank" rel="noopener" class="shareBtn facebook" data-cursor="icon">
-                <i class="fab fa-facebook"></i>
-            </a>
-            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($base_url . '/' . $slug); ?>&text=<?php echo urlencode($song['title'] . ' - ' . $song['artist']); ?>" target="_blank" rel="noopener" class="shareBtn twitter" data-cursor="icon">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <button onclick="copyToClipboard('<?php echo $base_url . '/' . $slug; ?>')" class="shareBtn copy" data-cursor="icon">
-                <i class="fas fa-link"></i>
-            </button>
-        </div>
-    </div>
-</section>
-
-<script>
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function() {
-        alert('Đã copy link!');
-    }, function(err) {
-        console.error('Could not copy text: ', err);
-    });
-}
-</script>
-
-<!-- Structured Data for SEO -->
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "MusicRecording",
-    "name": "<?php echo $song['title']; ?>",
-    "byArtist": {
-        "@type": "MusicGroup",
-        "name": "<?php echo $song['artist']; ?>"
-    },
-    "datePublished": "<?php echo $song['release_date']; ?>",
-    "description": "<?php echo $song['description']; ?>",
-    "url": "<?php echo $base_url . '/' . $slug; ?>"
-}
-</script>
-
-<?php include 'includes/footer.php'; ?>
+</body>
+</html>
