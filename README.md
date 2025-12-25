@@ -1,66 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Brothers Still Alive - Official Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+ **BSA+** - Rap Label Vi?t Nam
 
-## About Laravel
+Website: [brothersstillalive.studio](https://brothersstillalive.studio)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Gi?i thi?u
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Website chính th?c c?a **Brothers Still Alive** - m?t rap label/nhóm nh?c rap Vi?t Nam. Website du?c xây d?ng b?ng **PHP thu?n** d? d?m b?o tuong thích v?i m?i hosting.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## C?u trúc thu m?c
 
-## Learning Laravel
+```
+brothersstillalive.studio/
+ css/
+    styles.css          # Stylesheet chính
+ js/
+    scripts.js          # JavaScript chính
+ images/
+    songs/              # Cover art bài hát
+    og-image.jpg        # ?nh cho social sharing
+ includes/
+    header.php          # Header template
+    footer.php          # Footer template
+ .htaccess               # Apache URL rewriting
+ index.php               # Trang ch? (About)
+ song.php                # Template trang bài hát
+ README.md
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tính nang
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-  Trang About gi?i thi?u nhóm
+-  Trang bài hát v?i URL d?p (`/ten-bai-hat`)
+-  Dark theme aesthetic
+-  Responsive design (mobile-first)
+-  Custom cursor effects
+-  GSAP scroll animations
+-  SEO optimized v?i meta tags & structured data
+-  Social sharing links
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## URL Structure
 
-## Laravel Sponsors
+| URL | Mô t? |
+|-----|-------|
+| `/` | Trang ch? (About) |
+| `/{slug}` | Trang bài hát (VD: `/baithunhat`) |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Cài d?t
 
-### Premium Partners
+1. Upload toàn b? files lên hosting
+2. Ð?m b?o `mod_rewrite` du?c b?t trên Apache
+3. Thêm bài hát vào array `$songs` trong `song.php`
+4. Thêm cover images vào `images/songs/`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Thêm bài hát m?i
 
-## Contributing
+M? file `song.php` và thêm vào array `$songs`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```php
+$songs = [
+    'ten-bai-hat' => [
+        'title' => 'Tên Bài Hát',
+        'artist' => 'Tên Ngh? Si',
+        'release_date' => '2024-01-15',
+        'cover_image' => 'images/songs/ten-bai-hat.jpg',
+        'description' => 'Mô t? bài hát...',
+        'lyrics' => "Lyrics bài hát...",
+        'spotify_url' => 'https://open.spotify.com/track/xxx',
+        'apple_music_url' => 'https://music.apple.com/xxx',
+        'youtube_url' => 'https://youtube.com/watch?v=xxx',
+        'soundcloud_url' => 'https://soundcloud.com/xxx'
+    ],
+    // ... thêm bài hát khác
+];
+```
 
-## Code of Conduct
+## Yêu c?u hosting
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- PHP 7.4+
+- Apache v?i mod_rewrite
+- Không c?n database (d? li?u hardcoded)
 
-## Security Vulnerabilities
+## Phát tri?n trong tuong lai
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- [ ] Tích h?p database (MySQL/SQLite)
+- [ ] Admin panel d? qu?n lý bài hát
+- [ ] Trang danh sách t?t c? bài hát
+- [ ] Trang profile ngh? si
+- [ ] Newsletter subscription
+- [ ] Events calendar
 
-## License
+## Credits
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Design inspiration: Modern hip-hop aesthetics
+- Animations: GSAP (GreenSock)
+- Icons: Font Awesome
+- Fonts: Inter (Google Fonts)
+
+---
+
+Made with  by **Brothers Still Alive**

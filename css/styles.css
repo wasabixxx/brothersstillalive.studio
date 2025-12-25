@@ -1,0 +1,1518 @@
+/* =============
+    Variables & Root
+============= */
+:root {
+    --bg-color: #fff;
+    --bg-color-secondary: #EDEDED;
+    --body-text-color: #151515;
+    --border-color: #444444;
+    --button-color: #151515;
+    --button-color-secondary: #444444;
+    --button-color-tert: #B8B8B8;
+    --gradient-bg-none: linear-gradient(to top, #fff 0%, rgba(255, 255, 255, 0));
+    --gradient-bg-secondary-none: linear-gradient(to top, #EDEDED 0%, rgba(237, 237, 237, 0) 100%);
+    --color-accent: #d4003a;
+    --bold-text-color: #d4003a;
+    --solid-button-text-color: #f8f8f8;
+    --outline-button-text-color: #151515;
+    --color-dark-grey: #444444;
+    --color-light-grey: #EDEDED;
+}
+
+body.dark-theme {
+    --bg-color: #131313;
+    --body-text-color: #d8d8d8;
+    --bg-color-secondary: #232323;
+    --border-color: #444444;
+    --button-color: #d8d8d8;
+    --button-color-secondary: #444444;
+    --button-color-tert: #444444;
+    --outline-button-text-color: #d8d8d8;
+    --solid-button-text-color: #151515;
+    --gradient-bg-none: linear-gradient(to top, #131313 0%, rgba(19, 19, 19, 0) 100%);
+    --gradient-bg-secondary-none: linear-gradient(to top, #232323 0%, rgba(35, 35, 35, 0) 100%);
+    --color-accent: #ba003a;
+    --bold-text-color: #ba003a;
+}
+
+/* =============
+    Reset & Base
+============= */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 100%;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: var(--body-text-color);
+    background-color: var(--bg-color);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+    body {
+        display: grid;
+        grid-template-columns: 4rem auto;
+    }
+}
+
+@media (min-width: 992px) {
+    body * {
+        cursor: none !important;
+    }
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    color: var(--body-text-color);
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* =============
+    Typography
+============= */
+.h1, h1 {
+    font-size: clamp(3rem, 10vmax, 18vmin);
+    font-weight: 500;
+    overflow-wrap: break-word;
+}
+
+.h1 b, .h1 span, h1 b, h1 span {
+    font-weight: 800;
+    color: var(--color-accent);
+}
+
+@media (min-width: 992px) {
+    .h1, h1 {
+        font-size: clamp(3rem, 8vmax, 15vmin);
+    }
+}
+
+.h2, h2 {
+    font-size: clamp(1.8rem, 4.85vmax, 10vmin);
+    font-weight: 600;
+    text-align: left;
+    overflow-wrap: break-word;
+}
+
+.h2 b, .h2 span, h2 b, h2 span {
+    font-weight: 800;
+    color: var(--color-accent);
+}
+
+@media (min-width: 992px) {
+    .h2, h2 {
+        font-size: clamp(1.8rem, 4.5vmax, 10vmin);
+    }
+}
+
+.h3, h3 {
+    font-size: clamp(1.5rem, 2.5vmax, 7vmin);
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.h4, h4 {
+    font-size: clamp(1.2rem, 1.5vmax, 4vmin);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 110%;
+}
+
+.h5, h5 {
+    font-size: clamp(1.1rem, 1.3vmax, 2vmin);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-align: left;
+    line-height: 120%;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 150%;
+    color: var(--body-text-color);
+}
+
+@media (min-width: 768px) {
+    p {
+        font-size: 1.1rem;
+    }
+}
+
+.textRed {
+    color: var(--bold-text-color);
+}
+
+.textBold {
+    font-weight: 700;
+}
+
+.textExtraBold {
+    font-weight: 800;
+}
+
+.allCaps {
+    text-transform: uppercase;
+}
+
+/* =============
+    Links & Buttons
+============= */
+.link {
+    color: var(--body-text-color);
+    transition: color 0.25s;
+    font-weight: 800;
+}
+
+.link:hover, .link:active {
+    color: var(--color-accent);
+}
+
+.linkIcon {
+    color: var(--body-text-color);
+    font-size: 1.5em;
+}
+
+.linkIcon:hover, .linkIcon:active {
+    color: var(--color-accent);
+}
+
+.buttonSolid {
+    display: flex;
+    color: var(--solid-button-text-color);
+    padding: 1rem 1.5rem;
+    width: fit-content;
+    border-radius: 2rem;
+    font-weight: 500;
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.05rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.buttonSolid > svg {
+    margin-left: 1rem;
+    width: 1.5em;
+    fill: currentColor;
+}
+
+.buttonSolid::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--button-color);
+    left: 0;
+    top: 0;
+    border-radius: 2rem;
+    z-index: -2;
+    transform: scale(1);
+    transition: clip-path 0.15s, transform 0.25s;
+}
+
+.buttonSolid::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-accent);
+    left: 0;
+    top: 0;
+    border-radius: 2rem;
+    z-index: -1;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.15s, transform 0.25s;
+}
+
+.buttonSolid:hover::before,
+.buttonSolid:active::before {
+    transform: scale(1.1);
+}
+
+.buttonSolid:hover::after,
+.buttonSolid:active::after {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1.1);
+}
+
+.buttonOutline {
+    display: flex;
+    border: 2px solid var(--button-color);
+    color: var(--outline-button-text-color);
+    font-weight: bold;
+    padding: 0.75rem 1rem;
+    border-radius: 30px;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.125rem;
+    transform: scale(1);
+    transition: transform 0.25s;
+}
+
+@media (min-width: 768px) {
+    .buttonOutline {
+        padding: 1rem 1.5rem;
+    }
+}
+
+.buttonOutline::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--button-color);
+    left: -2px;
+    top: -2px;
+    border-radius: 2rem;
+    z-index: -1;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.25s;
+    border: 2px solid var(--button-color);
+}
+
+.buttonOutline:hover,
+.buttonOutline:active {
+    color: var(--bg-color);
+    transform: scale(1.1);
+}
+
+.buttonOutline:hover::before,
+.buttonOutline:active::before {
+    clip-path: inset(0 0 0 0);
+}
+
+.buttonOutlineRound {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--button-color);
+    border-radius: 100%;
+    position: relative;
+    z-index: 1;
+    color: var(--button-color);
+    transform: scale(1);
+    transition: transform 0.25s;
+}
+
+.buttonOutlineRound > svg {
+    width: 1.5em;
+    height: 1.5em;
+    fill: currentColor;
+}
+
+.buttonOutlineRound::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--button-color);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-color: var(--button-color);
+    border-radius: 100%;
+    clip-path: inset(0 100% 0 0);
+    transition: 0.25s;
+    z-index: -1;
+}
+
+.buttonOutlineRound:hover,
+.buttonOutlineRound:active {
+    transform: scale(1.1);
+    color: var(--bg-color);
+}
+
+.buttonOutlineRound:hover::before,
+.buttonOutlineRound:active::before {
+    clip-path: inset(0 0 0 0);
+}
+
+/* =============
+    Custom Cursor
+============= */
+.customCursor {
+    width: 30px;
+    height: 30px;
+    position: fixed;
+    top: -15px;
+    left: -15px;
+    z-index: 999;
+    border-radius: 100%;
+    pointer-events: none;
+    display: none;
+    --cursorScale: 1;
+    --cursorDefault: 1;
+    --cursorIcon: 1;
+    --cursorPlus: 0;
+    --cursorArrow: 0;
+    --cursorColor: var(--color-accent);
+    --cursorIconColor: var(--bg-color);
+}
+
+@media (min-width: 992px) {
+    .customCursor {
+        display: block;
+    }
+}
+
+.customCursorSVG {
+    transform: scale(var(--cursorScale));
+    transition: 0.25s transform;
+    transform-origin: center;
+}
+
+.customCursorSVG .cursorDefault {
+    fill: var(--cursorColor);
+    transform-origin: center;
+    transition: 0.25s transform;
+    transform: scale(var(--cursorDefault));
+}
+
+.customCursorSVG .cursorIcon {
+    fill: var(--body-text-color);
+    transition: 0.25s transform;
+    transform: scale(var(--cursorIcon));
+    transform-origin: center;
+    stroke: var(--bg-color);
+    stroke-width: 2;
+}
+
+.customCursorSVG .cursorPlus {
+    fill: var(--cursorIconColor);
+    transition: 0.25s transform;
+    transform: scale(var(--cursorPlus));
+    transform-origin: center;
+}
+
+.customCursorSVG .cursorArrow {
+    fill: var(--cursorIconColor);
+    transition: 0.25s transform;
+    transform: scale(var(--cursorArrow));
+    transform-origin: center;
+}
+
+.customCursor.plus {
+    --cursorScale: 3;
+    --cursorDefault: 3;
+    --cursorArrow: 0;
+    --cursorPlus: 0.5;
+    --cursorIcon: 0;
+}
+
+.customCursor.arrow {
+    --cursorScale: 1.5;
+    --cursorDefault: 2.5;
+    --cursorArrow: 0.75;
+    --cursorIcon: 0;
+}
+
+.customCursor.min {
+    --cursorDefault: 0;
+    --cursorScale: 2;
+}
+
+/* =============
+    Header & Navigation
+============= */
+header {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@media only screen and (min-width: 768px) and (min-height: 685px) {
+    header .navMobile {
+        display: none;
+    }
+}
+
+header .navMobileButton {
+    position: absolute;
+    bottom: 5vw;
+    right: 5%;
+    pointer-events: all;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--button-color);
+    border-radius: 100%;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .navMobileButton > * {
+    width: 40%;
+    height: 40%;
+    fill: var(--bg-color);
+}
+
+header .navMobileButton .bar {
+    transform-origin: center;
+    transition: transform 0.25s;
+}
+
+header .navMobileButton .barTop {
+    transform-origin: right center;
+}
+
+header .navMobileButton .barBot {
+    transform-origin: left center;
+}
+
+header .navMobileButton.closeBurger .barTop {
+    transform: scaleX(0);
+}
+
+header .navMobileButton.closeBurger .barBot {
+    transform: scaleX(0);
+}
+
+header .navMobileButton.closeBurger .barMid1 {
+    transform: rotateZ(45deg) scaleX(1.3);
+}
+
+header .navMobileButton.closeBurger .barMid2 {
+    transform: rotateZ(-45deg) scaleX(1.3);
+}
+
+header .navMobileContent {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow-y: scroll;
+    z-index: 20;
+}
+
+header .navMobileContent * {
+    pointer-events: none !important;
+}
+
+header .navMobileContent::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-accent);
+    transform-origin: bottom right;
+    transform: scale(0);
+    transition: transform 0.25s;
+}
+
+header .navMobileContent::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: var(--body-text-color);
+    transform-origin: bottom right;
+    transform: scale(0);
+    transition: transform 0.25s;
+    transition-delay: 0.2s;
+}
+
+header .navMobileContent ul {
+    padding: 0 10%;
+    align-self: end;
+    margin-bottom: calc(10% + 1rem);
+    z-index: 5;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: 0.25s;
+    transition-delay: 0.15s;
+}
+
+header .navMobileContent ul > li {
+    border-bottom: 1px solid var(--bg-color);
+}
+
+header .navMobileContent ul > li:last-of-type {
+    border-bottom: 0;
+}
+
+header .navMobileContent ul .navUiWrapper {
+    border-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    height: 4rem;
+}
+
+header .navMobileContent .linkNav {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--bg-color);
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    padding: 1rem 0;
+    display: inline-block;
+    width: 100%;
+}
+
+header .navMobileContent .linkNav > svg {
+    fill: currentColor;
+}
+
+header .navMobileContent .linkNav .linkNavIcon {
+    display: inline-block;
+    width: 1em;
+}
+
+header .navMobileContent .linkNav:active,
+header .navMobileContent .linkNav:hover {
+    color: var(--color-accent);
+}
+
+header .navMobileContent.openMenu {
+    display: grid;
+    pointer-events: all;
+}
+
+header .navMobileContent.openMenu * {
+    pointer-events: all !important;
+}
+
+header .navMobileContent.openMenu::before {
+    transform: scale(1);
+}
+
+header .navMobileContent.openMenu::after {
+    transform: scale(1);
+}
+
+header .navMobileContent.openMenu > ul {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Desktop Navigation */
+header .navDesktop {
+    pointer-events: all;
+    display: none;
+    min-width: 4rem;
+    height: 100vh;
+    background-color: #232323;
+    position: absolute;
+    left: 0;
+    z-index: 10;
+    clip-path: inset(0 calc(100% - 4rem - 2px) 0 0);
+    transition: 0.25s;
+    border-right: 2px solid #232323;
+}
+
+@media only screen and (min-width: 768px) and (min-height: 685px) {
+    header .navDesktop {
+        display: grid;
+        grid-template-rows: 9rem auto 1fr;
+        overflow-y: scroll;
+    }
+}
+
+header .navDesktop:hover {
+    clip-path: inset(0 0 0 0);
+}
+
+header .navDesktop ul {
+    display: grid;
+    margin-top: 2rem;
+    position: relative;
+}
+
+header .navDesktop ul li {
+    padding: 0.5rem 0;
+}
+
+header .navDesktop .linkNav {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #d8d8d8;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    transition: color 0.25s;
+}
+
+header .navDesktop .linkNav:hover,
+header .navDesktop .linkNav:active,
+header .navDesktop .linkNav.active {
+    color: var(--color-accent);
+}
+
+header .navDesktop .linkNavIcon {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
+    fill: currentColor;
+}
+
+header .navDesktop .navLogo {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .navDesktop .navLogo svg {
+    width: 100%;
+    max-width: 150px;
+    fill: #d8d8d8;
+}
+
+header .navDesktop .navUiWrapper {
+    padding: 1rem;
+    margin-top: auto;
+}
+
+header .navDesktop .navUiItem {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #d8d8d8;
+    padding: 0.5rem;
+    transition: color 0.25s;
+}
+
+header .navDesktop .navUiItem:hover {
+    color: var(--color-accent);
+}
+
+header .navDesktop .navUiSVG {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    fill: currentColor;
+}
+
+header .navDesktop .lightMode {
+    display: none;
+}
+
+header .navDesktop .darkMode {
+    display: block;
+}
+
+body:not(.dark-theme) header .navDesktop .lightMode {
+    display: block;
+}
+
+body:not(.dark-theme) header .navDesktop .darkMode {
+    display: none;
+}
+
+/* =============
+    Main Content
+============= */
+main {
+    min-height: 100vh;
+}
+
+/* =============
+    Helper Classes
+============= */
+.sectionp {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.sectionpv {
+    margin-bottom: 10%;
+}
+
+.mb10 {
+    margin-bottom: 1rem;
+}
+
+.mb20 {
+    margin-bottom: 2rem;
+}
+
+.mb30 {
+    margin-bottom: 3rem;
+}
+
+.mb40 {
+    margin-bottom: 4rem;
+}
+
+.pb10 {
+    padding-bottom: 1rem;
+}
+
+.pb20 {
+    padding-bottom: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.grid {
+    display: grid;
+}
+
+.image {
+    object-fit: cover;
+    width: 100%;
+}
+
+.image .imageContent {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* =============
+    About Page Styles
+============= */
+
+/* Intro Splash Section */
+.aboutIntroSplash {
+    position: relative;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.aboutIntroImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.aboutIntroImage::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+}
+
+.aboutIntroImageContent {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aboutIntroImageContent img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aboutIntroText {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    padding: 2rem;
+}
+
+.aboutIntroLogo {
+    width: 80%;
+    max-width: 600px;
+    height: auto;
+    margin: 0 auto 2rem;
+    fill: #fff;
+}
+
+.aboutIntroTitle {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: 0.5rem;
+    color: #fff;
+}
+
+/* Scroll Indicator */
+.scrollIndicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    animation: bounce 2s infinite;
+}
+
+.scrollIndicator p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--body-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.scrollIndicator .scrollSVG {
+    width: 2rem;
+    fill: currentColor;
+    transform: rotate(90deg);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Paragraph Section */
+.aboutParagraph {
+    padding: 10% 10%;
+    background-color: var(--bg-color);
+    position: relative;
+    z-index: 2;
+}
+
+.aboutParagraph p {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    line-height: 1.8;
+    max-width: 900px;
+}
+
+/* Slide Section */
+.aboutSlide {
+    position: relative;
+    overflow: hidden;
+    padding: 5% 0;
+    background-color: var(--bg-color);
+}
+
+.aboutSlideList {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0 10%;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.aboutSlideItem {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+    .aboutSlideItem {
+        flex: 0 0 45%;
+    }
+}
+
+@media (min-width: 992px) {
+    .aboutSlideItem {
+        flex: 0 0 30%;
+    }
+}
+
+.aboutSlideImage {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.aboutSlideImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.aboutSlideSVG {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.05;
+    fill: var(--body-text-color);
+}
+
+/* Artist Loop Section */
+.aboutArtistLoop {
+    padding: 5% 0;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+.artistLine {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    animation: scroll 20s linear infinite;
+    white-space: nowrap;
+}
+
+.artistLineOdd {
+    animation-direction: normal;
+}
+
+.artistLineEven {
+    animation-direction: reverse;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.artistLineItem {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--body-text-color);
+    transition: color 0.25s;
+}
+
+.artistLineItem:hover {
+    color: var(--color-accent);
+}
+
+.artistLine p {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--color-accent);
+}
+
+/* Achievement Section */
+.aboutAchievement {
+    padding: 10%;
+    background-color: var(--bg-color-secondary);
+}
+
+.aboutAchievement h2 {
+    margin-bottom: 2rem;
+}
+
+/* Contact Section */
+.homeContact {
+    padding: 10%;
+    background-color: var(--bg-color);
+}
+
+.homeContact h2 {
+    margin-bottom: 2rem;
+}
+
+.homeAddress {
+    margin-bottom: 2rem;
+}
+
+.homeAddress p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.homeAddress a {
+    color: var(--color-accent);
+}
+
+.homeSocial h3 {
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.homeSocialList {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.homeSocialList .linkIcon {
+    font-size: 2rem;
+    transition: transform 0.25s, color 0.25s;
+}
+
+.homeSocialList .linkIcon:hover {
+    transform: scale(1.2);
+    color: var(--color-accent);
+}
+
+/* Newsletter Section */
+.newsletter {
+    padding: 10%;
+    background-color: var(--bg-color-secondary);
+}
+
+.newsletter h2 {
+    margin-bottom: 2rem;
+}
+
+.newsletter h2 span {
+    color: var(--color-accent);
+}
+
+.newsletter .formContent {
+    max-width: 500px;
+}
+
+.newsletter .formInput {
+    margin-bottom: 1rem;
+}
+
+.newsletter .formInput label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.newsletter .formInput input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--bg-color);
+    color: var(--body-text-color);
+    font-size: 1rem;
+}
+
+.newsletter .formInput input:focus {
+    border-color: var(--color-accent);
+    outline: none;
+}
+
+/* =============
+    Footer
+============= */
+.siteFooter {
+    padding: 5% 10%;
+    background-color: #232323;
+    color: #d8d8d8;
+}
+
+.siteFooter > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .siteFooter > div {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+}
+
+.siteFooter p {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.siteFooter .link {
+    color: #d8d8d8;
+}
+
+.siteFooter .link:hover {
+    color: var(--color-accent);
+}
+
+/* =============
+    Animation Classes
+============= */
+.sectionAnimate {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.sectionAnimate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-fade="1"],
+[data-fade="2"] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.45s, transform 0.45s;
+}
+
+[data-fade="1"].visible,
+[data-fade="2"].visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-fade="2"] {
+    transition-delay: 0.25s;
+}
+
+/* =============
+    Responsive
+============= */
+@media (min-width: 768px) {
+    .mobileOnly {
+        display: none;
+    }
+}
+
+.tabletPlus {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .tabletPlus {
+        display: block;
+    }
+}
+
+.desktopOnly {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .desktopOnly {
+        display: block;
+    }
+}
+
+/* =============
+    Scrollbar
+============= */
+*[data-scrollbar="none"]::-webkit-scrollbar {
+    width: 0;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgba(68, 68, 68, 0.35);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(68, 68, 68, 0.75);
+}
+
+body::-webkit-scrollbar-track {
+    background: #232323;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* =============
+    Song Page Styles
+============= */
+
+/* Song Hero Section */
+.songHero {
+    padding-top: calc(var(--header-height) + 4rem);
+    padding-bottom: 4rem;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%);
+}
+
+.songHeroContent {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .songHeroContent {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .songCover {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}
+
+.songCover {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.songCover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.songCoverPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.songInfo {
+    padding-top: 1rem;
+}
+
+.songType {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+}
+
+.songTitle {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+}
+
+.songArtist {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.songDate {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.songDescription {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Streaming Links */
+.songStreaming h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.streamingLinks {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .streamingLinks {
+        justify-content: center;
+    }
+}
+
+.streamingBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.streamingBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.streamingBtn i {
+    font-size: 1.25rem;
+}
+
+.streamingBtn.spotify { background: #1DB954; }
+.streamingBtn.apple { background: #FA243C; }
+.streamingBtn.youtube { background: #FF0000; }
+.streamingBtn.soundcloud { background: #FF5500; }
+
+/* Lyrics Section */
+.songLyrics {
+    padding: 4rem 0;
+    background: var(--color-bg);
+}
+
+.songLyrics .container {
+    max-width: 800px;
+}
+
+.songLyrics h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.lyricsContent {
+    background: var(--color-bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.lyricsContent pre {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--color-text-secondary);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Share Section */
+.songShare {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.songShare h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.shareButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.shareBtn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    font-size: 1.25rem;
+    transition: background 0.2s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.shareBtn:hover {
+    transform: translateY(-3px);
+}
+
+.shareBtn.facebook:hover { background: #1877F2; color: #fff; }
+.shareBtn.twitter:hover { background: #1DA1F2; color: #fff; }
+.shareBtn.copy:hover { background: var(--color-accent); color: #fff; }
+
+/* 404 Not Found */
+.notFound {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notFound h1 {
+    font-size: clamp(5rem, 20vw, 10rem);
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.notFound h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
